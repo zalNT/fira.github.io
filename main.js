@@ -1,3 +1,13 @@
+/* ── HAMBURGER MENU ── */
+function toggleMenu() {
+  const btn      = document.getElementById('hamburger-btn');
+  const menu     = document.getElementById('side-menu');
+  const backdrop = document.getElementById('menu-backdrop');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+  backdrop.classList.toggle('show');
+}
+
 /* ─────────────────────────────────────────
    1. LOADING SCREEN LOGIC
 ───────────────────────────────────────── */

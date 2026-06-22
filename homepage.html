@@ -20,10 +20,26 @@
 </div>
 
 <!-- ══ FLOATING TOOLBAR ══ -->
-<div id="toolbar">
-  <button class="tb-btn" id="game-btn" title="Mini Games">🎮</button>
-  <button class="tb-btn" id="music-btn" title="Music Player">🎵</button>
+<!-- ══ HAMBURGER MENU ══ -->
+<div id="hamburger-btn" onclick="toggleMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
 </div>
+
+<div id="side-menu">
+  <div class="side-menu-header">Menu</div>
+  <button class="side-menu-item" id="game-btn" onclick="toggleMenu()">
+    <span class="side-menu-icon">🎮</span>
+    <span>Mini Games</span>
+  </button>
+  <button class="side-menu-item" id="music-btn" onclick="toggleMenu()">
+    <span class="side-menu-icon">🎵</span>
+    <span>Music Player</span>
+  </button>
+</div>
+
+<div id="menu-backdrop" onclick="toggleMenu()"></div>
 
 <!-- ══ MUSIC PANEL ══ -->
 <div id="music-panel">
