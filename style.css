@@ -225,7 +225,7 @@
 #now-playing-bubble {
   position: fixed;
   top: 1rem;
-  left: 50%;
+  left: calc(50% + 30px);
   transform: translateX(-50%) translateY(-80px);
   z-index: 580;
   background: rgba(22, 17, 13, 0.92);
