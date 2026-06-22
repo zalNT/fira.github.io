@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selamat Telah Menyelesaikan Skripsi 🎓</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══ LOADING SCREEN ══ -->
+<div id="loading-screen">
+  <div class="loader-cap">🎓</div>
+  <div class="loader-text">Mempersiapkan kejutan untukmu...</div>
+  <div class="loader-bar-wrap">
+    <div class="loader-bar" id="loader-bar"></div>
+  </div>
+  <div class="loader-pct" id="loader-pct">0%</div>
+</div>
+
+<!-- ══ FLOATING TOOLBAR ══ -->
+<div id="toolbar">
+  <button class="tb-btn" id="game-btn" title="Mini Games">🎮</button>
+  <button class="tb-btn" id="music-btn" title="Music Player">🎵</button>
+</div>
+
+<!-- ══ MUSIC PANEL ══ -->
+<div id="music-panel">
+  <p class="mp-title">♪ Now Playing</p>
+  <p class="mp-song-name" id="mp-song-name">Graduation Song</p>
+  <p class="mp-artist" id="mp-artist">🎓 Celebration Mix</p>
+  <div class="mp-progress-wrap" id="mp-progress-wrap">
+    <div class="mp-progress-fill" id="mp-progress-fill"></div>
+  </div>
+  <div class="mp-times">
+    <span id="mp-time-now">0:00</span>
+    <span id="mp-time-total">1:00</span>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-ctrl-btn" id="mp-prev" title="Previous">⏮</button>
+    <button class="mp-ctrl-btn play-pause" id="mp-play-pause">▶</button>
+    <button class="mp-ctrl-btn" id="mp-next" title="Next">⏭</button>
+  </div>
+  <div class="mp-playlist" id="mp-tracklist"></div>
+</div>
+
+<!-- ══ GAME OVERLAY ══ -->
+<div id="game-overlay">
+  <div id="game-modal">
+    <div class="gm-header">
+      <span class="gm-title">Mini Games Sarjana</span>
+      <button class="gm-close" id="gm-close">✕</button>
+    </div>
+    <div class="gm-tabs">
+      <div class="gm-tab active" data-game="game-memory">🃏 Memory</div>
+      <div class="gm-tab" data-game="game-scramble">🔤 Kata Acak</div>
+    </div>
+
+    <!-- Memory Game -->
+    <div class="gm-game active" id="game-memory">
+      <div class="gm-score" id="mem-score-container">Pasang: <span id="mem-score">0</span> | Langkah: <span id="mem-moves">0</span></div>
+      <div class="memory-board" id="memory-board"></div>
+      <button class="scramble-submit" id="mem-restart" style="width:100%;margin-top:0.5rem">🔄 Main Lagi</button>
+    </div>
+
+    <!-- Word Scramble -->
+    <div class="gm-game" id="game-scramble">
+      <div class="gm-score">Skor: <span id="sc-score">0</span> | Percobaan: <span id="sc-attempts">0</span></div>
+      <div class="scramble-word" id="sc-scrambled">LOADING</div>
+      <p class="scramble-hint" id="sc-hint"></p>
+      <div class="scramble-input-row">
+        <input type="text" class="scramble-input" id="sc-input" placeholder="Ketik jawabanmu..." autocomplete="off">
+        <button class="scramble-submit" id="sc-submit">Cek</button>
+      </div>
+      <p class="scramble-result" id="sc-result"></p>
+      <div style="text-align: center;">
+        <button class="mp-ctrl-btn" id="sc-skip" style="margin-top:0.5rem;font-size:0.8rem;color:var(--muted)">⏭ Lewati</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HERO — PARALLAX
+══════════════════════════════════════ -->
+<section class="parallax-hero" id="hero">
+  <div class="layer layer-bg"></div>
+  <div class="stars" id="stars"></div>
+
+  <div class="layer layer-mid" id="layerMid">
+    <svg viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <circle cx="700" cy="450" r="340" stroke="#C9A84C" stroke-width="0.6" opacity="0.18"/>
+      <circle cx="700" cy="450" r="420" stroke="#C9A84C" stroke-width="0.4" opacity="0.1"/>
+      <circle cx="700" cy="450" r="500" stroke="#C9A84C" stroke-width="0.3" opacity="0.07"/>
+      <path d="M80 80 L130 80 L130 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M80 80 L80 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M1320 80 L1270 80 L1270 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M1320 80 L1320 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M80 820 L130 820 L130 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M80 820 L80 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M1320 820 L1270 820 L1270 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <path d="M1320 820 L1320 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+    </svg>
+  </div>
+
+  <div class="layer layer-front" id="layerFront">
+    <svg viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <circle cx="200" cy="180" r="4" fill="#C9A84C" opacity="0.5"/>
+      <circle cx="1200" cy="200" r="3" fill="#C9A84C" opacity="0.4"/>
+      <circle cx="350" cy="700" r="5" fill="#C9A84C" opacity="0.3"/>
+      <circle cx="1100" cy="680" r="4" fill="#C9A84C" opacity="0.35"/>
+      <circle cx="150" cy="500" r="2.5" fill="#F0D58C" opacity="0.5"/>
+      <circle cx="1280" cy="450" r="2.5" fill="#F0D58C" opacity="0.5"/>
+      <rect x="644" y="100" width="112" height="10" rx="2" fill="#C9A84C" opacity="0.3"/>
+      <polygon points="700,110 640,145 760,145" fill="#C9A84C" opacity="0.15"/>
+      <line x1="700" y1="110" x2="720" y2="160" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
+      <circle cx="728" cy="165" r="5" fill="#C9A84C" opacity="0.25"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow">✦ Pencapaian Luar Biasa ✦</p>
+    <h1 class="hero-title">Selamat,<br><em>Sarjana!</em></h1>
+    <p class="hero-name">Kepada seluruh pejuang skripsi yang telah berhasil</p>
+    <div class="divider-gold">
+      <span class="divider-dot"></span>
+      <span class="divider-dot"></span>
+      <span class="divider-dot"></span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>Scroll</span>
+  </div>
+
+  <div class="confetti-wrap" id="confettiWrap"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+     QUOTE (SCROLL TRIGGERED + FALLING FLOWERS)
+══════════════════════════════════════ -->
+<section class="section-quote quote-scene" id="quoteScene">
+  <div class="bg-deco"></div>
+  <div class="bg-deco2"></div>
+
+  <div class="quote-inner reveal">
+      <span class="big-quote">"</span>
+      <p class="quote-text">
+          Setiap halaman yang kamu tulis,
+          setiap malam yang kamu habiskan,
+          setiap revisi yang kamu lewati —
+          semua itu bukan sia-sia.
+          Itu adalah bukti bahwa kamu tidak pernah menyerah.
+      </p>
+      <p class="quote-attr">
+          — Untuk para pejuang gelar
+      </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MILESTONES
+══════════════════════════════════════ -->
+<section class="section-milestones">
+  <p class="section-label reveal">Perjalananmu</p>
+  <h2 class="section-heading reveal">Jejak Perjuangan<br>yang Membanggakan</h2>
+  
+  <div class="carousel-container reveal">
+    <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous">❮</button>
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carousel-track">
+        <div class="carousel-card">
+          <div class="card">
+            <span class="card-icon">📚</span>
+            <p class="card-title">Riset Tanpa Henti</p>
+            <p class="card-desc">Dari perpustakaan hingga layar laptop, kamu menjelajahi setiap sumber untuk menemukan jawaban terbaik.</p>
+          </div>
+        </div>
+        <div class="carousel-card">
+          <div class="card">
+            <span class="card-icon">✍️</span>
+            <p class="card-title">Menulis dengan Jiwa</p>
+            <p class="card-desc">Setiap kata yang tertuang adalah hasil pemikiran mendalam dan dedikasi yang tidak ternilai.</p>
+          </div>
+        </div>
+        <div class="carousel-card">
+          <div class="card">
+            <span class="card-icon">🎯</span>
+            <p class="card-title">Menghadapi Sidang</p>
+            <p class="card-desc">Berdiri di depan penguji dengan percaya diri — itu adalah momen keberanianmu yang sesungguhnya.</p>
+          </div>
+        </div>
+        <div class="carousel-card">
+          <div class="card">
+            <span class="card-icon">🏆</span>
+            <p class="card-title">Meraih Gelar</p>
+            <p class="card-desc">Sebuah titel yang kini melekat pada namamu, bukti nyata dari kerja keras bertahun-tahun.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next">❯</button>
+  </div>
+  <div class="carousel-dots" id="carousel-dots"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+     IMAGE GALLERY — TEMPLATE POLAROID
+     Ini adalah area di mana kamu bisa 
+     memasang foto kamu sendiri
+══════════════════════════════════════ -->
+<section class="section-gallery">
+  <p class="section-label reveal" style="text-align: center; color: var(--gold); font-size:12px; font-weight:700; letter-spacing:0.35em;">Kenangan Indah</p>
+  <h2 class="section-heading reveal">Momen yang Tak<br>Terlupakan</h2>
+
+  <div class="gallery-grid">
+    
+    <!-- TEMPLATE FOTO 1 -->
+    <div class="gallery-item reveal">
+      <div class="gallery-img-wrap">
+        
+        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
+        <!-- Contoh: <img src="foto-bab1-aku.jpg" ...> -->
+        <img src="example.png" alt="Foto Bab 1" class="gallery-img">
+        
+        <div class="placeholder-text-wrap">
+          <div class="placeholder-icon">📸</div>
+          <p class="placeholder-text">Taruh Foto Bab 1 Di Sini</p>
+        </div>
+        
+        <div class="gallery-caption">Bab 1</div>
+      </div>
+    </div>
+
+    <!-- TEMPLATE FOTO 2 -->
+    <div class="gallery-item reveal" style="transition-delay: 0.1s">
+      <div class="gallery-img-wrap">
+        
+        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
+        <img src="example.png" alt="Revisi ke-∞" class="gallery-img">
+        
+        <div class="placeholder-text-wrap">
+          <div class="placeholder-icon">📸</div>
+          <p class="placeholder-text">Taruh Foto Revisi Di Sini</p>
+        </div>
+
+        <div class="gallery-caption">Revisi ke-∞</div>
+      </div>
+    </div>
+
+    <!-- TEMPLATE FOTO 3 -->
+    <div class="gallery-item reveal" style="transition-delay: 0.2s">
+      <div class="gallery-img-wrap">
+        
+        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
+        <img src="example.png" alt="Hari Sidang" class="gallery-img">
+        
+        <div class="placeholder-text-wrap">
+          <div class="placeholder-icon">📸</div>
+          <p class="placeholder-text">Taruh Foto Sidang Di Sini</p>
+        </div>
+
+        <div class="gallery-caption">Hari Sidang</div>
+      </div>
+    </div>
+
+    <!-- TEMPLATE FOTO 4 -->
+    <div class="gallery-item reveal" style="transition-delay: 0.3s">
+      <div class="gallery-img-wrap">
+        
+        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
+        <img src="example.png" alt="Selamat Lulus" class="gallery-img">
+        
+        <div class="placeholder-text-wrap">
+          <div class="placeholder-icon">📸</div>
+          <p class="placeholder-text">Taruh Foto Lulus Di Sini</p>
+        </div>
+
+        <div class="gallery-caption">Lulus!</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MESSAGE — VINTAGE LETTER
+══════════════════════════════════════ -->
+<section class="section-message">
+  <div class="message-inner">
+    <p class="section-label reveal">Pesan Untukmu</p>
+    
+    <div class="letter-wrapper reveal">
+      <div class="letter-content">
+        <h4 class="message-heading">
+          Ini Bukan Akhir,<br><em>Ini Awal dari Segalanya</em>
+        </h4>
+        
+        <div class="letter-body">
+          <p class="message-body">
+            Kamu telah membuktikan bahwa keteguhan hati, kerja keras, dan semangat belajar mampu mengantarmu melewati salah 
+            satu tantangan terbesar dalam hidupmu.
+          </p>
+          <p class="message-body">
+            Gelar yang kamu raih bukan sekadar tulisan di ijazah — ia adalah cerminan karakter, ketahanan, dan mimpi yang kamu perjuangkan setiap hari. Dunia menanti kontribusimu yang luar biasa.
+          </p>
+        </div>
+        
+        <div class="letter-signature">
+          <p class="message-sign">Selamat Melangkah Maju.</p>
+          <div class="sign-mark">🎓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SEKSI HARAPAN MASA DEPAN
+══════════════════════════════════════ -->
+<section class="section-future reveal">
+  <div class="message-inner" style="padding-top: 4rem;">
+    <p class="section-label">Langkah Selanjutnya</p>
+    <h2 class="section-heading" style="color: var(--gold-light);">Mimpi yang Menanti</h2>
+    <p style="color: var(--muted); text-align: center; line-height: 1.8;">
+      Gelar ini hanyalah pembuka pintu. Apa pun rencana masa depanmu — apakah itu mengejar karier impian, 
+      melanjutkan studi lebih tinggi, atau memulai petualangan baru — pastikan kamu tetap menjadi pribadi 
+      yang tangguh seperti saat menyelesaikan skripsi.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SEKSI TESTIMONI / THANK YOU
+══════════════════════════════════════ -->
+<section class="section-thanks reveal" style="padding: 4rem 2rem; text-align: center;">
+  <p class="section-label">Terima Kasih</p>
+  <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">Kepada Pendukung Setiamu</h3>
+  <p style="color: var(--muted);">
+    Jangan lupa untuk berterima kasih kepada orang tua, sahabat, dan pihak yang telah mendukungmu 
+    melewati hari-hari sulit di masa penyusunan skripsi.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <span class="gold-mark">✦</span>
+  <p>Dibuat dengan penuh kebanggaan · Untuk para Sarjana Terbaik</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
