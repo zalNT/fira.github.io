@@ -110,6 +110,8 @@
 (function initMusic() {
   const playlist = [
     { title: 'Best Friend', artist: '🎵 My Special Song', url: 'Best_Friend.mp3' },
+    { title: 'Made In Japan', artist: '🎵 My Special Song', url: 'Made_In_Japan.mp3' },
+
   ];
 
   let currentTrack = 0, isPlaying = false, audioElements = {}, currentAudio = null;
