@@ -131,7 +131,39 @@
 
   .scramble-word { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold-light); text-align: center; letter-spacing: 0.3em; margin: 1.5rem 0; text-shadow: 0 0 10px rgba(240, 213, 140, 0.3); }
   .scramble-hint { font-size: 0.85rem; color: var(--muted); text-align: center; margin-bottom: 1.5rem; }
-  .scramble-input-row { display: flex; gap: 10px; }
+  .scramble-input-row { 
+  display: flex; 
+  gap: 8px;
+  align-items: stretch;
+}
+
+.scramble-input { 
+  flex: 1; 
+  min-width: 0;
+  padding: 10px 16px; 
+  background: rgba(255,255,255,0.05); 
+  border: 1px solid rgba(201,168,76,0.3); 
+  border-radius: 12px; 
+  color: #FEFCF6; 
+  font-size: 1rem; 
+  outline: none; 
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+}
+
+.scramble-submit { 
+  padding: 10px 16px; 
+  background: var(--gold); 
+  border: none; 
+  border-radius: 12px; 
+  color: var(--ink); 
+  font-weight: 700; 
+  cursor: pointer; 
+  font-size: 0.9rem; 
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
   .scramble-input { flex: 1; padding: 10px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 12px; color: #FEFCF6; font-size: 1rem; outline: none; transition: border-color 0.2s, background 0.2s; }
   .scramble-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
   .scramble-submit { padding: 10px 20px; background: var(--gold); border: none; border-radius: 12px; color: var(--ink); font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: background 0.2s, transform 0.2s; }
