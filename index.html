@@ -3,355 +3,620 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Selamat Telah Menyelesaikan Skripsi 🎓</title>
+<title>Kotak Misteri</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root {
+  --gold: #C9A84C;
+  --gold-light: #F0D58C;
+  --gold-pale: #FDF6E3;
+  --ink: #1A1612;
+  --ink-soft: #3D3530;
+  --muted: #8C7B6B;
+  --cream: #FAF7F2;
+  --parchment: #F3EDD8;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: radial-gradient(ellipse at 50% 60%, #2E2217 0%, #1A1612 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── STARS ── */
+#stars-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.star-p {
+  position: absolute;
+  border-radius: 50%;
+  background: #F0D58C;
+  animation: twinkle var(--d,3s) ease-in-out infinite var(--dl,0s);
+}
+@keyframes twinkle {
+  0%,100%{opacity:0;transform:scale(0.7);}
+  50%{opacity:var(--op,0.6);transform:scale(1);}
+}
+
+/* ── FLOATING PETALS ── */
+.petal {
+  position: fixed;
+  font-size: var(--fs,1.2rem);
+  pointer-events: none;
+  z-index: 0;
+  animation: petalFall var(--dur,8s) linear infinite var(--delay,0s);
+  opacity: 0;
+}
+@keyframes petalFall {
+  0%{transform:translateY(-60px) rotate(0deg) translateX(0);opacity:0;}
+  10%{opacity:0.7;}
+  85%{opacity:0.5;}
+  100%{transform:translateY(105vh) rotate(var(--rot,360deg)) translateX(var(--dx,20px));opacity:0;}
+}
+
+/* ── MAIN SCENE ── */
+#scene {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.intro-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.3s;
+}
+
+/* ── BOX ── */
+#gift-wrap {
+  cursor: pointer;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.6s;
+  user-select: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#gift-svg {
+  width: min(320px, 80vw);
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+#gift-wrap:hover #gift-svg {
+  transform: scale(1.03) translateY(-4px);
+}
+
+.shine-box { display: none; }
+
+.click-hint {
+  font-size: 0.85rem;
+  color: rgba(240,213,140,0.6);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1s, pulseHint 2s ease-in-out infinite 2s;
+}
+@keyframes pulseHint {
+  0%,100%{opacity:0.5;}
+  50%{opacity:1;}
+}
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── LID OPEN ── */
+#lid {
+  transform-origin: center bottom;
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lid-open #lid {
+  transform: rotate(-140deg) translateY(-10px);
+}
+
+/* ── LETTER OVERLAY ── */
+#letter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(16, 12, 8, 0.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  pointer-events: none;
+  transition: background 0.6s ease;
+}
+#letter-overlay.show {
+  background: rgba(16, 12, 8, 0.85);
+  pointer-events: all;
+  backdrop-filter: blur(8px);
+}
+
+#letter-card {
+  background: #FDFBF7;
+  background-image: 
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border-radius: 4px;
+  padding: 3.5rem 3rem 3rem;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), inset 0 0 40px rgba(139,115,85,0.08);
+  transform: scale(0.85) translateY(40px);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s, opacity 0.5s ease 0.2s;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+#letter-card::-webkit-scrollbar{width:4px;}
+#letter-card::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px;}
+
+#letter-overlay.show #letter-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Red margin line */
+#letter-card::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 48px;
+  width: 2px;
+  background: rgba(226,75,74,0.3);
+}
+
+.letter-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  padding-left: 24px;
+}
+
+.letter-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  margin-bottom: 2rem;
+  padding-left: 24px;
+}
+.letter-heading em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.letter-body-wrap {
+  padding-left: 24px;
+}
+
+.letter-p {
+  font-size: 1.05rem;
+  line-height: 2;
+  color: var(--ink-soft);
+  margin-bottom: 1.2rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.divider-letter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2rem 0;
+}
+.divider-letter::before,.divider-letter::after {
+  content:'';flex:1;height:1px;background:rgba(201,168,76,0.3);
+}
+.divider-letter span {
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+.letter-sign {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  display: inline-block;
+  transform: rotate(-2deg);
+  margin-top: 1.5rem;
+}
+
+.letter-emoji {
+  display: block;
+  font-size: 2rem;
+  margin-top: 0.5rem;
+  animation: floatMoji 3s ease-in-out infinite;
+}
+@keyframes floatMoji {
+  0%,100%{transform:translateY(0) rotate(5deg);}
+  50%{transform:translateY(-8px) rotate(-5deg);}
+}
+
+/* ── CLOSE BTN ── */
+#close-btn {
+  position: sticky;
+  top: -3.5rem;
+  right: 0;
+  float: right;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+#close-btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+  transform: rotate(90deg);
+  border-color: var(--gold);
+}
+
+/* ── PARTICLES BURST ── */
+.burst-p {
+  position: fixed;
+  pointer-events: none;
+  z-index: 500;
+  border-radius: 2px;
+  animation: burstFly var(--bd, 1s) ease-out forwards;
+}
+@keyframes burstFly {
+  0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1;}
+  100%{transform:translate(var(--bx,0px),var(--by,-120px)) rotate(var(--br,360deg)) scale(0.3);opacity:0;}
+}
+
+/* ── CONFETTI MINI ── */
+.conf-mini {
+  position: fixed;
+  pointer-events: none;
+  z-index: 501;
+  animation: confMini linear forwards;
+  opacity: 0;
+}
+@keyframes confMini {
+  0%{transform:translateY(0) rotate(0deg);opacity:0;}
+  10%{opacity:1;}
+  80%{opacity:0.8;}
+  100%{transform:translateY(60vh) rotate(720deg);opacity:0;}
+}
+
+/* ── REDIRECT OVERLAY ── */
+#redirect-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #1A1612;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+#redirect-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.redir-cap { font-size: 4rem; animation: capBounce 1.2s ease-in-out infinite; }
+@keyframes capBounce {
+  0%,100%{transform:translateY(0) rotate(-5deg);}
+  50%{transform:translateY(-16px) rotate(5deg);}
+}
+.redir-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.redir-bar-wrap {
+  width: min(300px,70vw); height: 4px;
+  background: rgba(201,168,76,0.2);
+  border-radius: 4px; overflow: hidden;
+}
+.redir-bar {
+  height:100%; width:0%;
+  background: linear-gradient(90deg,var(--gold),var(--gold-light));
+  border-radius:4px; transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(240,213,140,0.4);
+}
+
+/* Mobile */
+@media(max-width:480px){
+  #letter-card{padding:2.5rem 1.5rem 2rem;}
+  #letter-card::before{left:28px;}
+  .letter-eyebrow,.letter-heading,.letter-body-wrap{padding-left:12px;}
+  .letter-p{font-size:0.95rem;}
+}
+</style>
 </head>
 <body>
 
-<!-- ══ LOADING SCREEN ══ -->
-<div id="loading-screen">
-  <div class="loader-cap">🎓</div>
-  <div class="loader-text">Mempersiapkan kejutan untukmu...</div>
-  <div class="loader-bar-wrap">
-    <div class="loader-bar" id="loader-bar"></div>
-  </div>
-  <div class="loader-pct" id="loader-pct">0%</div>
-</div>
+<!-- Stars -->
+<div id="stars-bg"></div>
 
-<!-- ══ FLOATING TOOLBAR ══ -->
-<div id="toolbar">
-  <button class="tb-btn" id="game-btn" title="Mini Games">🎮</button>
-  <button class="tb-btn" id="music-btn" title="Music Player">🎵</button>
-</div>
+<!-- Scene -->
+<div id="scene">
+  <p class="intro-label">✦ Untuk Kamu ✦</p>
 
-<!-- ══ MUSIC PANEL ══ -->
-<div id="music-panel">
-  <p class="mp-title">♪ Now Playing</p>
-  <p class="mp-song-name" id="mp-song-name">Graduation Song</p>
-  <p class="mp-artist" id="mp-artist">🎓 Celebration Mix</p>
-  <div class="mp-progress-wrap" id="mp-progress-wrap">
-    <div class="mp-progress-fill" id="mp-progress-fill"></div>
-  </div>
-  <div class="mp-times">
-    <span id="mp-time-now">0:00</span>
-    <span id="mp-time-total">1:00</span>
-  </div>
-  <div class="mp-controls">
-    <button class="mp-ctrl-btn" id="mp-prev" title="Previous">⏮</button>
-    <button class="mp-ctrl-btn play-pause" id="mp-play-pause">▶</button>
-    <button class="mp-ctrl-btn" id="mp-next" title="Next">⏭</button>
-  </div>
-  <div class="mp-playlist" id="mp-tracklist"></div>
-</div>
+  <div id="gift-wrap" onclick="openBox()">
+    <svg id="gift-svg" viewBox="0 0 280 300" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-<!-- ══ GAME OVERLAY ══ -->
-<div id="game-overlay">
-  <div id="game-modal">
-    <div class="gm-header">
-      <span class="gm-title">Mini Games Sarjana</span>
-      <button class="gm-close" id="gm-close">✕</button>
-    </div>
-    <div class="gm-tabs">
-      <div class="gm-tab active" data-game="game-memory">🃏 Memory</div>
-      <div class="gm-tab" data-game="game-scramble">🔤 Kata Acak</div>
-    </div>
+      <!-- BOX BODY -->
+      <rect x="30" y="140" width="220" height="140" rx="6" fill="#2E2217" stroke="#C9A84C" stroke-width="1.5"/>
+      <!-- box shading -->
+      <rect x="30" y="140" width="220" height="140" rx="6" fill="url(#boxGrad)" opacity="0.4"/>
+      <!-- vertical ribbon on body -->
+      <rect x="122" y="140" width="36" height="140" fill="#C9A84C" opacity="0.25"/>
+      <!-- horizontal ribbon on body -->
+      <rect x="30" y="195" width="220" height="30" fill="#C9A84C" opacity="0.2"/>
+      <!-- gold trim body -->
+      <rect x="30" y="140" width="220" height="140" rx="6" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
 
-    <!-- Memory Game -->
-    <div class="gm-game active" id="game-memory">
-      <div class="gm-score" id="mem-score-container">Pasang: <span id="mem-score">0</span> | Langkah: <span id="mem-moves">0</span></div>
-      <div class="memory-board" id="memory-board"></div>
-      <button class="scramble-submit" id="mem-restart" style="width:100%;margin-top:0.5rem">🔄 Main Lagi</button>
-    </div>
+      <!-- BOW -->
+      <!-- left loop -->
+      <ellipse cx="110" cy="105" rx="38" ry="22" fill="#C9A84C" opacity="0.85" transform="rotate(-20 110 105)"/>
+      <ellipse cx="110" cy="105" rx="26" ry="13" fill="#1A1612" opacity="0.45" transform="rotate(-20 110 105)"/>
+      <!-- right loop -->
+      <ellipse cx="170" cy="105" rx="38" ry="22" fill="#C9A84C" opacity="0.85" transform="rotate(20 170 105)"/>
+      <ellipse cx="170" cy="105" rx="26" ry="13" fill="#1A1612" opacity="0.45" transform="rotate(20 170 105)"/>
+      <!-- bow center knot -->
+      <ellipse cx="140" cy="118" rx="16" ry="13" fill="#F0D58C"/>
+      <ellipse cx="140" cy="118" rx="8" ry="6" fill="#C9A84C"/>
 
-    <!-- Word Scramble -->
-    <div class="gm-game" id="game-scramble">
-      <div class="gm-score">Skor: <span id="sc-score">0</span> | Percobaan: <span id="sc-attempts">0</span></div>
-      <div class="scramble-word" id="sc-scrambled">LOADING</div>
-      <p class="scramble-hint" id="sc-hint"></p>
-      <div class="scramble-input-row">
-        <input type="text" class="scramble-input" id="sc-input" placeholder="Ketik jawabanmu..." autocomplete="off">
-        <button class="scramble-submit" id="sc-submit">Cek</button>
-      </div>
-      <p class="scramble-result" id="sc-result"></p>
-      <div style="text-align: center;">
-        <button class="mp-ctrl-btn" id="sc-skip" style="margin-top:0.5rem;font-size:0.8rem;color:var(--muted)">⏭ Lewati</button>
-      </div>
-    </div>
-  </div>
-</div>
+      <!-- LID (animated) -->
+      <g id="lid">
+        <!-- lid body -->
+        <rect x="20" y="108" width="240" height="44" rx="6" fill="#2E2217" stroke="#C9A84C" stroke-width="1.5"/>
+        <rect x="20" y="108" width="240" height="44" rx="6" fill="url(#lidGrad)" opacity="0.5"/>
+        <!-- vertical ribbon on lid -->
+        <rect x="122" y="108" width="36" height="44" fill="#C9A84C" opacity="0.25"/>
+        <!-- gold trim lid -->
+        <rect x="20" y="108" width="240" height="44" rx="6" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+      </g>
 
-<!-- ══════════════════════════════════════
-     HERO — PARALLAX
-══════════════════════════════════════ -->
-<section class="parallax-hero" id="hero">
-  <div class="layer layer-bg"></div>
-  <div class="stars" id="stars"></div>
+      <!-- GLOW on bow -->
+      <ellipse cx="140" cy="115" rx="50" ry="25" fill="#C9A84C" opacity="0.08"/>
 
-  <div class="layer layer-mid" id="layerMid">
-    <svg viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <circle cx="700" cy="450" r="340" stroke="#C9A84C" stroke-width="0.6" opacity="0.18"/>
-      <circle cx="700" cy="450" r="420" stroke="#C9A84C" stroke-width="0.4" opacity="0.1"/>
-      <circle cx="700" cy="450" r="500" stroke="#C9A84C" stroke-width="0.3" opacity="0.07"/>
-      <path d="M80 80 L130 80 L130 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M80 80 L80 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M1320 80 L1270 80 L1270 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M1320 80 L1320 130" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M80 820 L130 820 L130 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M80 820 L80 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M1320 820 L1270 820 L1270 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
-      <path d="M1320 820 L1320 770" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+      <!-- SHINE dots -->
+      <circle cx="68" cy="170" r="2.5" fill="#F0D58C" opacity="0.4"/>
+      <circle cx="210" cy="185" r="2" fill="#F0D58C" opacity="0.35"/>
+      <circle cx="185" cy="250" r="1.8" fill="#C9A84C" opacity="0.3"/>
+      <circle cx="55" cy="245" r="2" fill="#F0D58C" opacity="0.3"/>
+
+      <!-- tag dangling -->
+      <line x1="183" y1="140" x2="200" y2="158" stroke="#C9A84C" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>
+      <rect x="192" y="155" width="38" height="24" rx="3" fill="#FDF6E3" stroke="#C9A84C" stroke-width="1" opacity="0.9"/>
+      <text x="211" y="170" text-anchor="middle" font-family="'Caveat',cursive" font-size="9" fill="#8C7B6B">untukmu</text>
+
+      <!-- SHADOW -->
+      <ellipse cx="140" cy="286" rx="100" ry="10" fill="#000" opacity="0.3"/>
+
+      <defs>
+        <linearGradient id="boxGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0.2"/>
+        </linearGradient>
+        <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0.15"/>
+        </linearGradient>
+      </defs>
     </svg>
+
+    <div class="shine-box"></div>
   </div>
 
-  <div class="layer layer-front" id="layerFront">
-    <svg viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <circle cx="200" cy="180" r="4" fill="#C9A84C" opacity="0.5"/>
-      <circle cx="1200" cy="200" r="3" fill="#C9A84C" opacity="0.4"/>
-      <circle cx="350" cy="700" r="5" fill="#C9A84C" opacity="0.3"/>
-      <circle cx="1100" cy="680" r="4" fill="#C9A84C" opacity="0.35"/>
-      <circle cx="150" cy="500" r="2.5" fill="#F0D58C" opacity="0.5"/>
-      <circle cx="1280" cy="450" r="2.5" fill="#F0D58C" opacity="0.5"/>
-      <rect x="644" y="100" width="112" height="10" rx="2" fill="#C9A84C" opacity="0.3"/>
-      <polygon points="700,110 640,145 760,145" fill="#C9A84C" opacity="0.15"/>
-      <line x1="700" y1="110" x2="720" y2="160" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
-      <circle cx="728" cy="165" r="5" fill="#C9A84C" opacity="0.25"/>
-    </svg>
-  </div>
+  <p class="click-hint">✨ Ketuk untuk membuka ✨</p>
+</div>
 
-  <div class="hero-content">
-    <p class="eyebrow">✦ Pencapaian Luar Biasa ✦</p>
-    <h1 class="hero-title">Selamat,<br><em>Sarjana!</em></h1>
-    <p class="hero-name">Kepada seluruh pejuang skripsi yang telah berhasil</p>
-    <div class="divider-gold">
-      <span class="divider-dot"></span>
-      <span class="divider-dot"></span>
-      <span class="divider-dot"></span>
-    </div>
-  </div>
+<!-- Letter Overlay -->
+<div id="letter-overlay">
+  <div id="letter-card">
+    <button id="close-btn" onclick="closeLetter()" title="Tutup">✕</button>
 
-  <div class="scroll-hint">
-    <div class="scroll-arrow"></div>
-    <span>Scroll</span>
-  </div>
+    <p class="letter-eyebrow">✦ Surat Kecil Untukmu ✦</p>
+    <h2 class="letter-heading">
+      Selamat,<br><em>Kamu Berhasil!</em>
+    </h2>
 
-  <div class="confetti-wrap" id="confettiWrap"></div>
-</section>
-
-<!-- ══════════════════════════════════════
-     QUOTE (SCROLL TRIGGERED + FALLING FLOWERS)
-══════════════════════════════════════ -->
-<section class="section-quote quote-scene" id="quoteScene">
-  <div class="bg-deco"></div>
-  <div class="bg-deco2"></div>
-
-  <div class="quote-inner reveal">
-      <span class="big-quote">"</span>
-      <p class="quote-text">
-          Setiap halaman yang kamu tulis,
-          setiap malam yang kamu habiskan,
-          setiap revisi yang kamu lewati —
-          semua itu bukan sia-sia.
-          Itu adalah bukti bahwa kamu tidak pernah menyerah.
+    <div class="letter-body-wrap">
+      <p class="letter-p">
+        Hei, kamu — ya, kamu yang sedang membaca ini.
+        Aku ingin kamu tahu bahwa apa yang baru saja kamu capai itu sungguh luar biasa.
+        Tidak mudah, dan tidak semua orang bisa melakukannya.
       </p>
-      <p class="quote-attr">
-          — Untuk para pejuang gelar
+      <p class="letter-p">
+        Ingat malam-malam panjang itu? Saat layar laptop menjadi satu-satunya cahaya di ruangan,
+        saat kalimat terasa berat untuk ditulis, saat revisi terasa tiada akhirnya —
+        kamu melewati semua itu. Dan sekarang kamu di sini.
       </p>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════
-     MILESTONES
-══════════════════════════════════════ -->
-<section class="section-milestones">
-  <p class="section-label reveal">Perjalananmu</p>
-  <h2 class="section-heading reveal">Jejak Perjuangan<br>yang Membanggakan</h2>
-  
-  <div class="carousel-container reveal">
-    <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous">❮</button>
-    <div class="carousel-wrapper">
-      <div class="carousel-track" id="carousel-track">
-        <div class="carousel-card">
-          <div class="card">
-            <span class="card-icon">📚</span>
-            <p class="card-title">Riset Tanpa Henti</p>
-            <p class="card-desc">Dari perpustakaan hingga layar laptop, kamu menjelajahi setiap sumber untuk menemukan jawaban terbaik.</p>
-          </div>
-        </div>
-        <div class="carousel-card">
-          <div class="card">
-            <span class="card-icon">✍️</span>
-            <p class="card-title">Menulis dengan Jiwa</p>
-            <p class="card-desc">Setiap kata yang tertuang adalah hasil pemikiran mendalam dan dedikasi yang tidak ternilai.</p>
-          </div>
-        </div>
-        <div class="carousel-card">
-          <div class="card">
-            <span class="card-icon">🎯</span>
-            <p class="card-title">Menghadapi Sidang</p>
-            <p class="card-desc">Berdiri di depan penguji dengan percaya diri — itu adalah momen keberanianmu yang sesungguhnya.</p>
-          </div>
-        </div>
-        <div class="carousel-card">
-          <div class="card">
-            <span class="card-icon">🏆</span>
-            <p class="card-title">Meraih Gelar</p>
-            <p class="card-desc">Sebuah titel yang kini melekat pada namamu, bukti nyata dari kerja keras bertahun-tahun.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next">❯</button>
-  </div>
-  <div class="carousel-dots" id="carousel-dots"></div>
-</section>
+      <div class="divider-letter"><span>🎓</span></div>
 
-<!-- ══════════════════════════════════════
-     IMAGE GALLERY — TEMPLATE POLAROID
-     Ini adalah area di mana kamu bisa 
-     memasang foto kamu sendiri
-══════════════════════════════════════ -->
-<section class="section-gallery">
-  <p class="section-label reveal" style="text-align: center; color: var(--gold); font-size:12px; font-weight:700; letter-spacing:0.35em;">Kenangan Indah</p>
-  <h2 class="section-heading reveal">Momen yang Tak<br>Terlupakan</h2>
+      <p class="letter-p">
+        Gelar yang kini melekat pada namamu bukan sekadar huruf di atas kertas.
+        Ia adalah bukti dari karakter yang tangguh, tekad yang tak mudah padam,
+        dan semangat belajar yang tidak pernah kamu padamkan — bahkan saat segalanya terasa berat.
+      </p>
+      <p class="letter-p">
+        Dunia menantikanmu. Dengan semua yang sudah kamu pelajari, semua yang sudah kamu lewati —
+        kamu jauh lebih siap dari yang kamu kira untuk melangkah ke babak berikutnya.
+        Dan aku percaya, babak itu akan indah.
+      </p>
 
-  <div class="gallery-grid">
-    
-    <!-- TEMPLATE FOTO 1 -->
-    <div class="gallery-item reveal">
-      <div class="gallery-img-wrap">
-        
-        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
-        <!-- Contoh: <img src="foto-bab1-aku.jpg" ...> -->
-        <img src="ChatGPT Image Jun 22, 2026, 12_27_37 AM.png" alt="Foto Bab 1" class="gallery-img">
-        
-        <div class="placeholder-text-wrap">
-          <div class="placeholder-icon">📸</div>
-          <p class="placeholder-text">Taruh Foto Bab 1 Di Sini</p>
-        </div>
-        
-        <div class="gallery-caption">Bab 1</div>
-      </div>
-    </div>
+      <div class="divider-letter"><span>✦</span></div>
 
-    <!-- TEMPLATE FOTO 2 -->
-    <div class="gallery-item reveal" style="transition-delay: 0.1s">
-      <div class="gallery-img-wrap">
-        
-        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
-        <img src="ChatGPT Image Jun 22, 2026, 12_27_37 AM.png" alt="Revisi ke-∞" class="gallery-img">
-        
-        <div class="placeholder-text-wrap">
-          <div class="placeholder-icon">📸</div>
-          <p class="placeholder-text">Taruh Foto Revisi Di Sini</p>
-        </div>
+      <p class="letter-p" style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--ink);">
+        "Ini bukan akhir dari perjalanan — ini adalah halaman pertama dari bab paling menarik dalam hidupmu."
+      </p>
 
-        <div class="gallery-caption">Revisi ke-∞</div>
-      </div>
-    </div>
-
-    <!-- TEMPLATE FOTO 3 -->
-    <div class="gallery-item reveal" style="transition-delay: 0.2s">
-      <div class="gallery-img-wrap">
-        
-        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
-        <img src="ChatGPT Image Jun 22, 2026, 12_27_37 AM.png" alt="Hari Sidang" class="gallery-img">
-        
-        <div class="placeholder-text-wrap">
-          <div class="placeholder-icon">📸</div>
-          <p class="placeholder-text">Taruh Foto Sidang Di Sini</p>
-        </div>
-
-        <div class="gallery-caption">Hari Sidang</div>
-      </div>
-    </div>
-
-    <!-- TEMPLATE FOTO 4 -->
-    <div class="gallery-item reveal" style="transition-delay: 0.3s">
-      <div class="gallery-img-wrap">
-        
-        <!-- MASUKKAN LINK FOTO ASLI DI ATRIBUT src DI BAWAH INI -->
-        <img src="ChatGPT Image Jun 22, 2026, 12_27_37 AM.png" alt="Selamat Lulus" class="gallery-img">
-        
-        <div class="placeholder-text-wrap">
-          <div class="placeholder-icon">📸</div>
-          <p class="placeholder-text">Taruh Foto Lulus Di Sini</p>
-        </div>
-
-        <div class="gallery-caption">Lulus!</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     MESSAGE — VINTAGE LETTER
-══════════════════════════════════════ -->
-<section class="section-message">
-  <div class="message-inner">
-    <p class="section-label reveal">Pesan Untukmu</p>
-    
-    <div class="letter-wrapper reveal">
-      <div class="letter-content">
-        <h4 class="message-heading">
-          Ini Bukan Akhir,<br><em>Ini Awal dari Segalanya</em>
-        </h4>
-        
-        <div class="letter-body">
-          <p class="message-body">
-            Kamu telah membuktikan bahwa keteguhan hati, kerja keras, dan semangat belajar mampu mengantarmu melewati salah 
-            satu tantangan terbesar dalam hidupmu.
-          </p>
-          <p class="message-body">
-            Gelar yang kamu raih bukan sekadar tulisan di ijazah — ia adalah cerminan karakter, ketahanan, dan mimpi yang kamu perjuangkan setiap hari. Dunia menanti kontribusimu yang luar biasa.
-          </p>
-        </div>
-        
-        <div class="letter-signature">
-          <p class="message-sign">Selamat Melangkah Maju.</p>
-          <div class="sign-mark">🎓</div>
-        </div>
+      <div style="text-align:right;margin-top:2rem;">
+        <span class="letter-sign">Selamat Melangkah Maju.</span>
+        <span class="letter-emoji">🎓</span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══════════════════════════════════════
-     SEKSI HARAPAN MASA DEPAN
-══════════════════════════════════════ -->
-<section class="section-future reveal">
-  <div class="message-inner" style="padding-top: 4rem;">
-    <p class="section-label">Langkah Selanjutnya</p>
-    <h2 class="section-heading" style="color: var(--gold-light);">Mimpi yang Menanti</h2>
-    <p style="color: var(--muted); text-align: center; line-height: 1.8;">
-      Gelar ini hanyalah pembuka pintu. Apa pun rencana masa depanmu — apakah itu mengejar karier impian, 
-      melanjutkan studi lebih tinggi, atau memulai petualangan baru — pastikan kamu tetap menjadi pribadi 
-      yang tangguh seperti saat menyelesaikan skripsi.
-    </p>
+<!-- Redirect overlay -->
+<div id="redirect-overlay">
+  <div class="redir-cap">🎓</div>
+  <p class="redir-text">Membuka perayaanmu...</p>
+  <div class="redir-bar-wrap">
+    <div class="redir-bar" id="redir-bar"></div>
   </div>
-</section>
+</div>
 
-<!-- ══════════════════════════════════════
-     SEKSI TESTIMONI / THANK YOU
-══════════════════════════════════════ -->
-<section class="section-thanks reveal" style="padding: 4rem 2rem; text-align: center;">
-  <p class="section-label">Terima Kasih</p>
-  <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">Kepada Pendukung Setiamu</h3>
-  <p style="color: var(--muted);">
-    Jangan lupa untuk berterima kasih kepada orang tua, sahabat, dan pihak yang telah mendukungmu 
-    melewati hari-hari sulit di masa penyusunan skripsi.
-  </p>
-</section>
+<script>
+/* ── STARS ── */
+(function(){
+  const wrap = document.getElementById('stars-bg');
+  const colors = ['#F0D58C','#FFF9E6','#C9A84C','#FFFFFF'];
+  for(let i=0;i<90;i++){
+    const s = document.createElement('div');
+    s.className='star-p';
+    const sz = Math.random()*2.5+0.8;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};--d:${2.5+Math.random()*4}s;--dl:${Math.random()*5}s;--op:${0.3+Math.random()*0.7};`;
+    wrap.appendChild(s);
+  }
+})();
 
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
-<footer>
-  <span class="gold-mark">✦</span>
-  <p>Dibuat dengan penuh kebanggaan · Untuk para Sarjana Terbaik</p>
-</footer>
+/* ── PETALS ── */
+(function(){
+  const petals = ['🌸','✨','⭐','🌟','💛','🏵️'];
+  for(let i=0;i<12;i++){
+    const p = document.createElement('div');
+    p.className='petal';
+    p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    p.style.cssText=`left:${Math.random()*100}%;--fs:${0.8+Math.random()*0.8}rem;--dur:${10+Math.random()*8}s;--delay:${Math.random()*10}s;--rot:${Math.random()>0.5?360:-360}deg;--dx:${(Math.random()-0.5)*80}px;`;
+    document.body.appendChild(p);
+  }
+})();
 
-<script src="main.js"></script>
+/* ── BOX OPEN ── */
+let boxOpened = false;
+
+function openBox(){
+  if(boxOpened) return;
+  boxOpened = true;
+
+  // Open lid
+  document.getElementById('gift-wrap').classList.add('lid-open');
+
+  // Burst particles
+  const cx = window.innerWidth/2, cy = window.innerHeight/2;
+  const colors = ['#C9A84C','#F0D58C','#FFF9E6','#E8D080','#a07830'];
+  for(let i=0;i<30;i++){
+    const bp = document.createElement('div');
+    bp.className='burst-p';
+    const sz=4+Math.random()*7;
+    const angle=Math.random()*Math.PI*2;
+    const dist=80+Math.random()*160;
+    bp.style.cssText=`
+      width:${sz}px;height:${sz}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${cx}px;top:${cy-40}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      --bx:${Math.cos(angle)*dist}px;
+      --by:${Math.sin(angle)*dist-100}px;
+      --br:${Math.random()*720}deg;
+      --bd:${0.6+Math.random()*0.8}s;
+    `;
+    document.body.appendChild(bp);
+    setTimeout(()=>bp.remove(),1800);
+  }
+
+  // Mini confetti falling
+  setTimeout(()=>{
+    for(let i=0;i<25;i++){
+      const c=document.createElement('div');
+      c.className='conf-mini';
+      const sz=4+Math.random()*6;
+      c.style.cssText=`
+        width:${sz}px;height:${sz}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        left:${20+Math.random()*60}%;top:0;
+        border-radius:${Math.random()>0.5?'50%':'2px'};
+        animation-duration:${3+Math.random()*4}s;
+        animation-delay:${Math.random()*1.5}s;
+      `;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),8000);
+    }
+  },300);
+
+  // Show letter after short delay
+  setTimeout(()=>{
+    document.getElementById('letter-overlay').classList.add('show');
+  }, 700);
+}
+
+/* ── CLOSE LETTER ── */
+function closeLetter(){
+  const overlay = document.getElementById('letter-overlay');
+  overlay.classList.remove('show');
+
+  // Start redirect sequence
+  setTimeout(()=>{
+    const ro = document.getElementById('redirect-overlay');
+    ro.classList.add('show');
+
+    let pct=0;
+    const bar = document.getElementById('redir-bar');
+    const iv = setInterval(()=>{
+      const step = pct<70 ? 3+Math.random()*5 : 1+Math.random()*2;
+      pct = Math.min(pct+step, 98);
+      bar.style.width = pct+'%';
+    },80);
+
+    setTimeout(()=>{
+      clearInterval(iv);
+      bar.style.width='100%';
+      setTimeout(()=>{
+        // Redirect to main page
+        window.location.href = 'index.html';
+      }, 500);
+    }, 2200);
+  }, 400);
+}
+</script>
 </body>
 </html>
