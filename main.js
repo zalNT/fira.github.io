@@ -135,6 +135,8 @@ function toggleMenu() {
   const artistName = document.getElementById('mp-artist'), progressFill = document.getElementById('mp-progress-fill');
   const timeNow    = document.getElementById('mp-time-now'), timeTotal = document.getElementById('mp-time-total');
   const trackList  = document.getElementById('mp-tracklist');
+  const bubble      = document.getElementById('now-playing-bubble');
+  const bubbleTitle = document.getElementById('bubble-title');
 
   if (!panel) return;
 
@@ -166,15 +168,16 @@ function toggleMenu() {
   }
 
   function loadTrack(idx) {
-    currentTrack = idx;
-    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-    currentAudio = audioElements[idx];
-    songName.textContent = playlist[idx].title;
-    artistName.textContent = playlist[idx].artist;
-    timeTotal.textContent = fmt(currentAudio.duration || 0);
-    updateProgress();
-    document.querySelectorAll('.mp-track').forEach((el, i) => el.classList.toggle('active', i === idx));
-  }
+  currentTrack = idx;
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  currentAudio = audioElements[idx];
+  songName.textContent = playlist[idx].title;
+  artistName.textContent = playlist[idx].artist;
+  bubbleTitle.textContent = playlist[idx].title; // ← tambahkan ini
+  timeTotal.textContent = fmt(currentAudio.duration || 0);
+  updateProgress();
+  document.querySelectorAll('.mp-track').forEach((el, i) => el.classList.toggle('active', i === idx));
+}
 
   function updateProgress() {
     if (currentAudio) {
@@ -186,21 +189,29 @@ function toggleMenu() {
   }
 
   function startPlay() {
-    if (!currentAudio) return;
-    if (currentAudio.paused) {
-      currentAudio.play().catch(err => console.warn('Play error:', err));
-      playPause.textContent = '⏸';
-      isPlaying = true;
-    }
+  if (!currentAudio) return;
+  if (currentAudio.paused) {
+    currentAudio.play().catch(err => console.warn('Play error:', err));
+    playPause.textContent = '⏸';
+    isPlaying = true;
+    bubbleTitle.textContent = playlist[currentTrack].title;
+    bubble.classList.add('show');
+    bubble.classList.remove('paused');
+    const bp = document.getElementById('bubble-play');
+    if (bp) bp.textContent = '⏸';
   }
+}
 
-  function stopPlay() {
-    if (currentAudio) {
-      currentAudio.pause();
-      playPause.textContent = '▶';
-      isPlaying = false;
-    }
+function stopPlay() {
+  if (currentAudio) {
+    currentAudio.pause();
+    playPause.textContent = '▶';
+    isPlaying = false;
+    bubble.classList.add('paused');
+    const bp = document.getElementById('bubble-play');
+    if (bp) bp.textContent = '▶';
   }
+}
 
   musicBtn.addEventListener('click', () => { panel.classList.toggle('open'); musicBtn.classList.toggle('active'); });
   playPause.addEventListener('click', () => { if (isPlaying) stopPlay(); else startPlay(); });
@@ -220,6 +231,25 @@ function toggleMenu() {
     currentAudio.currentTime = ((e.clientX - rect.left) / rect.width) * currentAudio.duration;
     updateProgress();
   });
+
+document.getElementById('mp-close')?.addEventListener('click', () => {
+  panel.classList.remove('open');
+  document.getElementById('music-btn')?.classList.remove('active');
+});
+// Bubble controls
+document.getElementById('bubble-play')?.addEventListener('click', () => {
+  if (isPlaying) stopPlay(); else startPlay();
+});
+document.getElementById('bubble-prev')?.addEventListener('click', () => {
+  if (currentAudio) currentAudio.pause();
+  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  loadTrack(currentTrack); startPlay();
+});
+document.getElementById('bubble-next')?.addEventListener('click', () => {
+  if (currentAudio) currentAudio.pause();
+  currentTrack = (currentTrack + 1) % playlist.length;
+  loadTrack(currentTrack); startPlay();
+});
 
   initAudioElements();
   buildPlaylist();

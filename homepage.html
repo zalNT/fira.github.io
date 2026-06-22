@@ -43,7 +43,10 @@
 
 <!-- ══ MUSIC PANEL ══ -->
 <div id="music-panel">
-  <p class="mp-title">♪ Now Playing</p>
+  <div class="mp-header">
+    <p class="mp-title">♪ Now Playing</p>
+    <button class="mp-close-btn" id="mp-close" title="Tutup">✕</button>
+  </div>
   <p class="mp-song-name" id="mp-song-name">Graduation Song</p>
   <p class="mp-artist" id="mp-artist">🎓 Celebration Mix</p>
   <div class="mp-progress-wrap" id="mp-progress-wrap">
@@ -59,6 +62,21 @@
     <button class="mp-ctrl-btn" id="mp-next" title="Next">⏭</button>
   </div>
   <div class="mp-playlist" id="mp-tracklist"></div>
+</div>
+
+<!-- Bubble now playing -->
+<div id="now-playing-bubble">
+  <div class="bubble-bars">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="bubble-info">
+    <p class="bubble-title" id="bubble-title">-</p>
+  </div>
+  <div class="bubble-controls">
+    <button class="bubble-btn" id="bubble-prev">⏮</button>
+    <button class="bubble-btn bubble-play" id="bubble-play">▶</button>
+    <button class="bubble-btn" id="bubble-next">⏭</button>
+  </div>
 </div>
 
 <!-- ══ GAME OVERLAY ══ -->

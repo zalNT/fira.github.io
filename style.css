@@ -193,6 +193,140 @@
   .mp-track { padding: 8px 10px; font-size: 0.8rem; color: rgba(254,252,246,0.6); cursor: pointer; border-radius: 8px; transition: background 0.2s, color 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
   .mp-track:hover { background: rgba(201,168,76,0.1); color: var(--gold-light); }
   .mp-track.active { color: var(--ink); background: var(--gold); font-weight: 500; }
+  /* ── MUSIC PANEL HEADER ── */
+.mp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.mp-header .mp-title { margin-bottom: 0; }
+
+.mp-close-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--muted);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.mp-close-btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+
+/* ── NOW PLAYING BUBBLE ── */
+#now-playing-bubble {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  z-index: 580;
+  background: rgba(22, 17, 13, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 999px;
+  padding: 7px 10px 7px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+  max-width: 320px;
+  white-space: nowrap;
+}
+#now-playing-bubble.show {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* bars */
+.bubble-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.bubble-bars span {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--gold);
+  animation: barBounce 0.8s ease-in-out infinite;
+}
+.bubble-bars span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+.bubble-bars span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+.bubble-bars span:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+.bubble-bars span:nth-child(4) { height: 5px;  animation-delay: 0.45s; }
+@keyframes barBounce {
+  0%,100% { transform: scaleY(0.4); opacity: 0.6; }
+  50%      { transform: scaleY(1);   opacity: 1; }
+}
+#now-playing-bubble.paused .bubble-bars span {
+  animation-play-state: paused;
+  transform: scaleY(0.4);
+  opacity: 0.4;
+}
+
+/* info */
+.bubble-info {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+.bubble-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* controls */
+.bubble-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.bubble-btn {
+  background: none;
+  border: none;
+  color: rgba(240,213,140,0.65);
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+.bubble-btn:hover {
+  color: var(--gold-light);
+  background: rgba(201,168,76,0.15);
+}
+.bubble-play {
+  width: 32px; height: 32px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+.bubble-play:hover {
+  background: var(--gold-light);
+  color: var(--ink);
+}
 
   /* --- GAME MODAL --- */
   #game-overlay {
