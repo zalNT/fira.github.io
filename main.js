@@ -109,8 +109,8 @@
 ───────────────────────────────────────── */
 (function initMusic() {
   const playlist = [
-    { title: 'Can"t" Take My Eyes Off You', artist: '🎵 Frankie Vallie', url: 'song/Cant_Take_My_Eyes_Off_You.mp3' },
-    { title: 'Nothing"s" Gonna Change My Love For You', artist: '🎵 George Benson', url: 'song/Nothings_Gonna_Change_My_Love_For_You.mp3' },
+    { title: 'Cant Take My Eyes Off You', artist: '🎵 Frankie Vallie', url: 'song/Cant_Take_My_Eyes_Off_You.mp3' },
+    { title: 'Nothings Gonna Change My Love For You', artist: '🎵 George Benson', url: 'song/Nothings_Gonna_Change_My_Love_For_You.mp3' },
     { title: 'Put Your Head On My Shoulder', artist: '🎵 Paul Anka', url: 'song/Put_Your_Head_On_My_Shoulder.mp3' },
     { title: 'Shape Of My Heart', artist: '🎵 Backstreet Boys', url: 'song/Shape_Of_My_Heart.mp3' },
     { title: 'Risk It All', artist: '🎵 Bruno Mars', url: 'song/Risk_It_All.mp3' },
