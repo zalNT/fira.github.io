@@ -162,8 +162,21 @@
   .divider-gold::before, .divider-gold::after { content: ''; display: block; width: 80px; height: 1px; background: var(--gold); opacity: 0.6; }
   .divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
   
-  .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0; animation: fadeUp 1s ease forwards 1.5s; }
-  .scroll-hint span { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,213,140,0.6); font-weight: 500; }
+.scroll-hint { 
+  position: absolute; 
+  bottom: 2.5rem; 
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
+  z-index: 10; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px; 
+  opacity: 0; 
+  animation: fadeUp 1s ease forwards 1.5s; 
+}  .scroll-hint span { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,213,140,0.6); font-weight: 500; }
   .scroll-arrow { width: 24px; height: 36px; border: 2px solid rgba(240,213,140,0.4); border-radius: 12px; position: relative; }
   .scroll-arrow::after { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 4px; height: 6px; border-radius: 2px; background: var(--gold-light); animation: scrollDot 1.8s ease-in-out infinite; }
   @keyframes scrollDot { 0% { top: 6px; opacity: 1; height: 6px; } 80% { top: 20px; opacity: 0; height: 10px; } 100% { top: 6px; opacity: 0; height: 6px; } }
